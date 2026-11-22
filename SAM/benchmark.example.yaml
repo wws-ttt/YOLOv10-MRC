@@ -1,0 +1,29 @@
+# Paths are relative to this file. Replace the example paths with your data.
+classes: [blastomere, pronucleus]  # YOLO IDs: 0 = o, 1 = p
+device: cpu                       # or cuda:0
+min_mask_pixels: 4
+
+train:
+  images: ./data/train/images
+  labels: ./data/train/labels
+
+test:
+  images: ./data/test/images
+  labels: ./data/test/labels
+  # manifest: ./test-subset.txt  # One image path relative to test.images per line.
+
+segmenters:
+  cellpose_sam:
+    kind: cellpose
+    # checkpoint: ./weights/cpsam  # Optional local Cellpose 4.0 CPSAM weights.
+  sam_vit_b:
+    kind: sam
+    model_type: vit_b
+    checkpoint: ./weights/sam_vit_b_01ec64.pth
+    generator:
+      points_per_side: 64
+
+detector:
+  kind: rtdetr  # Use yolo here only for a checkpoint with a YOLO detection head.
+  checkpoint: ./weights/yolo-mrc-best.pt
+  imgsz: 640
